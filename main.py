@@ -65,6 +65,6 @@ def solve_sudoku(event):
                 if index not in initial_indices:
                     cell.classList.add("solved-number")
                 
-                message_el.innerText = "解けました"
-            else:
-                message_el.innerText = "解けません"
+        message_el.innerText = "解けました"
+    else:
+        message_el.innerText = "解けません"

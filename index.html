@@ -15,16 +15,36 @@
             const grid = document.getElementById('sudoku-grid');
             for (let i = 0; i < 81; i++){
                 const input = document.createElement('input');
-                input.type = 'number';
-                input.min = 1;
-                input.max = 9;
+                input.type = 'text';
+                input.inputMode = 'numeric';
+                input.maxLength = 1;
                 input.id = `cell-${i}`;
+                input.autocomplete = "off";
+
+                input.oninput = function(){
+                    this.value = this,value.replace(/[^1-9]/g, '');
+                };
+
+                const row = Math.floor(i / 9);
+                const cpl = i % 9;
+
+                if (col === 2 || col === 5){
+                    input.classList.add('border-right-bold')
+                }
+
+                if (row === 2 || row === 5){
+                    input.classList.add('border-bottom-bold');
+                }
+
                 grid.appendChild(input);
             }
         </script>
     </div>
 
-    <button py-click="solve_sudoku">Solve</button>
+    <div class="controls">  
+        <button py-click="solve_sudoku">Solve</button>
+        <buttom onclick="location.reload()" class="btn reset">Reset</buttom>
+    </div>
     
     <p id="message"></p>
 
