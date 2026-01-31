@@ -22,11 +22,11 @@
                 input.autocomplete = "off";
 
                 input.oninput = function(){
-                    this.value = this,value.replace(/[^1-9]/g, '');
+                    this.value = this.value.replace(/[^1-9]/g, '');
                 };
 
                 const row = Math.floor(i / 9);
-                const cpl = i % 9;
+                const col = i % 9;
 
                 if (col === 2 || col === 5){
                     input.classList.add('border-right-bold')
@@ -42,8 +42,8 @@
     </div>
 
     <div class="controls">  
-        <button py-click="solve_sudoku">Solve</button>
-        <buttom onclick="location.reload()" class="btn reset">Reset</buttom>
+        <button py-click="solve_sudoku" class="btn">Solve</button>
+        <button onclick="location.reload()" class="btn reset">Reset</button>
     </div>
     
     <p id="message"></p>
