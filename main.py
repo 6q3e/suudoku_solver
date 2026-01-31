@@ -40,6 +40,10 @@ def check_initial_validity(board):
                     board[r][c] = num
                     return False
                 board[r][c] = num
+            else:
+              for i in range(1, 10):
+                  if not is_valid(board, r, c, i):
+                      return False 
     return True
 
 def solve(board):
