@@ -15,20 +15,48 @@ def get_board():
         board.append(row)
     return board
 
-def is_valid(board, r, c, num):
+def get_possible_values(board, r, c):
+    used = set()
+
     for i in range(9):
-        if board[r][i] == num:
-            return False
+        if board[r][i] != 0:
+            used.add(board[r][i])
+
     for i in range(9):
-        if board[i][c] == num:
-            return False
-        
+        if board[i][c] != 0:
+            used.add(board[i][c])
+    
     start_r, start_c = 3 * (r // 3), 3 * (c // 3)
     for i in range(3):
         for j in range(3):
-            if board[start_r + i][start_c + j] == num:
-                return False
-    return True
+            val = board[start_r + i][start_c + j]
+            if val != 0:
+                used.add(val)
+    
+    return [num for num in range(1, 10) if num not in used]
+
+def find_best_empty_cell(board):
+    min_candidates_len = 10
+    best_cell = None
+    best_candidates = []
+
+    for r in range(9):
+        for c in range(9):
+            if board[r][c] == 0:
+                candidates = get_possible_values(board, r, c)
+                num_candidates = len(candidates)
+
+                if num_candidates == 0:
+                    return (r, c), []
+                
+                if num_candidates < min_candidates_len:
+                    min_candidates_len = num_candidates
+                    best_cell = (r,c)
+                    best_candidates = candidates
+
+                    if min_candidates_len == 1:
+                        return best_cell, best_candidates
+    return best_cell, best_candidates
 
 def check_initial_validity(board):
     for r in range(9):
@@ -36,28 +64,30 @@ def check_initial_validity(board):
             num = board[r][c]
             if num != 0:
                 board[r][c] = 0
-                if not is_valid(board, r, c, num):
+                candidates = get_possible_values(board, r, c)
+                if num not in candidates:
                     board[r][c] = num
                     return False
                 board[r][c] = num
-            else:
-              for i in range(1, 10):
-                  if not is_valid(board, r, c, i):
-                      return False 
     return True
 
 def solve(board):
-    for r in range(9):
-        for c in range(9):
-            if board[r][c] == 0:
-                for num in range(1, 10):
-                    if is_valid(board, r, c, num):
-                        board[r][c] = num
-                        if solve(board):
-                            return True
-                        board[r][c] = 0
-                return False
-    return True
+    cell, candidates = find_best_empty_cell(board)
+
+    if cell is None:
+        return True
+    
+    r,c = cell
+
+    for num in candidates:
+        board[r][c] = num
+
+        if solve(board):
+            return True
+        
+        board[r][c] = 0
+    
+    return False
 
 def solve_sudoku(event):
     message_el = document.querySelector("#message")
