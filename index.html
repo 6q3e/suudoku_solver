@@ -9,17 +9,38 @@
 </head>
 <body>
 
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" onchange="toggleDarkMode()">
+            <div class="slider"></div>
+        </label>
+    </div>
+
     <h1>数独ソルバー</h1>
     <div id="sudoku-grid" class="grid-container"></div>
 
     <div class="controls">  
         <button py-click="solve_sudoku" class="btn">Solve</button>
-        <button onclick="location.reload()" class="btn reset">Reset</button>
+        <button onclick="resetBoard()" class="btn reset">Reset</button>
     </div>
     
     <p id="message"></p>
 
     <script>
+        function toggleDarkMode() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+        }
+
+        function resetBoard() {
+            const inputs = document.querySelectorAll('#sudoku-grid input');
+            inputs.forEach(input => {
+                input.value = '';
+                input.classList.remove('solved-number');
+            });
+            document.getElementById('message').innerText = '';            
+        }
+
         const grid = document.getElementById('sudoku-grid');
         for (let i = 0; i < 81; i++){
             const input = document.createElement('input');
@@ -47,7 +68,6 @@
                 }
 
                 let  nextIndex = -1;
-
                 if (e.key === 'ArrowRight'){
                     if (col < 8){
                         nextIndex = index + 1;
