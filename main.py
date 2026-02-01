@@ -97,15 +97,12 @@ def solve_sudoku(event):
     message_el.innerText = "計算中"
 
     raw_board = get_board()
-
     solver = BitwiseSudokuSolver(raw_board)
 
     if not solver.is_valid_initial:
         message_el.innerText = "エラー：同じ列・行・ブロック内で数字が重複しています"
         message_el.style.color = "#d63384"
         return
-
-    message_el.innerText = "計算中"
     
     if solver.solve():
         initial_indices = []
